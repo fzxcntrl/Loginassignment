@@ -111,7 +111,7 @@ export default function Register() {
             >
               <PartyPopper className="w-20 h-20 text-primary" strokeWidth={1.5} />
               <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-center px-4" style={{ fontFamily: "'Architects Daughter', cursive" }}>
-                Welcome to your new notebook!
+                Welcome to your new Account!
               </h2>
             </motion.div>
           </motion.div>

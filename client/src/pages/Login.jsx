@@ -169,9 +169,9 @@ export default function Login() {
                 <span className="text-lg text-zinc-600 group-hover:text-primary transition-colors select-none">Remember me</span>
               </label>
               
-              <a href="#" className="text-lg font-bold text-primary hover:underline decoration-wavy underline-offset-4">
+              <Link to="/forgot-password" title="Go to Forgot password" className="text-lg font-bold text-primary hover:underline decoration-wavy underline-offset-4">
                 Forgot password?
-              </a>
+              </Link>
             </div>
 
             <Button type="submit" className="w-full text-xl h-14" isLoading={isLoading}>
