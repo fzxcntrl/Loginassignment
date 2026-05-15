@@ -5,7 +5,7 @@ import * as z from 'zod';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, ArrowRight, ShieldAlert, CheckCircle, Pencil } from 'lucide-react';
+import { Mail, ArrowRight, ShieldAlert, CheckCircle } from 'lucide-react';
 import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
 
@@ -17,7 +17,7 @@ export default function ForgotPassword() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [resetToken, setResetToken] = useState(''); // For assignment simulation
+  const [resetToken, setResetToken] = useState('');
 
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(forgotSchema),
@@ -41,54 +41,39 @@ export default function ForgotPassword() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden text-foreground">
-      <div className="absolute inset-0 graph-paper pointer-events-none" />
-      
-      <div className="w-full max-w-md mx-auto p-4 sm:p-8 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="sketchy-card p-8 sm:p-10"
-        >
-          <div className="mb-8 flex flex-col items-center text-center">
-            <div className="w-16 h-16 sketchy-border bg-yellow-100 flex items-center justify-center mb-4 transform -rotate-3">
-              <span className="text-primary font-bold text-3xl" style={{ fontFamily: "'Architects Daughter', cursive" }}>Hi</span>
-            </div>
-            <h2 className="text-4xl font-bold tracking-tight mb-2" style={{ fontFamily: "'Architects Daughter', cursive" }}>Forgot Password?</h2>
-            <p className="text-lg text-zinc-600">Enter your email and we'll send you a link to reset your password.</p>
-          </div>
+    <div className="min-h-screen bg-zinc-50 flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-zinc-900 tracking-tight">Forgot Password</h1>
+          <p className="text-zinc-500 mt-2">No worries, we'll send you reset instructions</p>
+        </div>
 
+        <div className="bg-white p-8 rounded-3xl border border-zinc-200 shadow-sm">
           <AnimatePresence>
             {error && (
               <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                className="bg-red-50 border-2 border-red-500 text-red-600 text-lg p-3 sketchy-border mb-6 flex items-center gap-2 overflow-hidden font-bold"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-red-50 border border-red-100 text-red-600 text-sm p-4 rounded-xl mb-6 flex items-center gap-3"
               >
-                <ShieldAlert className="w-5 h-5 shrink-0" strokeWidth={1.5} />
-                <span>{error}</span>
+                <ShieldAlert size={18} />
+                {error}
               </motion.div>
             )}
             {success && (
               <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                className="bg-green-50 border-2 border-green-500 text-green-600 text-lg p-3 sketchy-border mb-6 flex flex-col items-center gap-2 overflow-hidden font-bold"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="bg-green-50 border border-green-100 text-green-600 text-sm p-5 rounded-2xl mb-6 space-y-4"
               >
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="w-5 h-5 shrink-0" strokeWidth={1.5} />
-                  <span>{success}</span>
+                <div className="flex items-center gap-3 font-bold">
+                  <CheckCircle size={20} />
+                  {success}
                 </div>
                 {resetToken && (
-                  <div className="mt-4 p-4 border-2 border-dashed border-green-300 rounded-xl bg-white w-full">
-                    <p className="text-sm text-zinc-500 mb-2 font-normal">Assignment Simulation Link:</p>
-                    <Link 
-                      to={`/reset-password/${resetToken}`}
-                      className="text-primary hover:underline block break-all text-sm"
-                    >
+                  <div className="p-3 bg-white border border-green-200 rounded-xl">
+                    <p className="text-[10px] text-zinc-400 uppercase font-bold mb-1">Dev Simulation Link:</p>
+                    <Link to={`/reset-password/${resetToken}`} className="text-indigo-600 hover:underline break-all text-xs">
                       /reset-password/{resetToken}
                     </Link>
                   </div>
@@ -99,28 +84,31 @@ export default function ForgotPassword() {
 
           {!success && (
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-              <Input
-                {...register('email')}
-                type="email"
-                placeholder="Email address"
-                icon={Mail}
-                error={errors.email}
-              />
+              <div className="space-y-1">
+                <label className="text-sm font-semibold text-zinc-700 ml-1">Email Address</label>
+                <Input
+                  {...register('email')}
+                  type="email"
+                  placeholder="name@example.com"
+                  icon={Mail}
+                  error={errors.email}
+                />
+              </div>
 
-              <Button type="submit" className="w-full text-xl h-14" isLoading={isLoading}>
+              <Button type="submit" className="w-full h-12 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-lg shadow-indigo-100 mt-2" isLoading={isLoading}>
                 Send Reset Link
-                {!isLoading && <ArrowRight className="ml-2 w-5 h-5" />}
+                {!isLoading && <ArrowRight className="ml-2 w-4 h-4" />}
               </Button>
             </form>
           )}
 
-          <div className="mt-8 text-center text-lg text-zinc-600">
+          <div className="mt-8 text-center text-sm text-zinc-500">
             Back to{' '}
-            <Link to="/login" className="text-primary font-bold hover:underline decoration-wavy underline-offset-4">
+            <Link to="/login" className="text-indigo-600 font-bold hover:text-indigo-700">
               Sign In
             </Link>
           </div>
-        </motion.div>
+        </div>
       </div>
     </div>
   );

@@ -46,91 +46,84 @@ export default function ResetPassword() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden text-foreground">
-      <div className="absolute inset-0 graph-paper pointer-events-none" />
-      
-      <div className="w-full max-w-md mx-auto p-4 sm:p-8 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="sketchy-card p-8 sm:p-10"
-        >
-          <div className="mb-8 flex flex-col items-center text-center">
-            <div className="w-16 h-16 sketchy-border bg-yellow-100 flex items-center justify-center mb-4 transform -rotate-3">
-              <span className="text-primary font-bold text-3xl" style={{ fontFamily: "'Architects Daughter', cursive" }}>Hi</span>
-            </div>
-            <h2 className="text-4xl font-bold tracking-tight mb-2" style={{ fontFamily: "'Architects Daughter', cursive" }}>Reset Password</h2>
-            <p className="text-lg text-zinc-600">Enter your new password below.</p>
-          </div>
+    <div className="min-h-screen bg-zinc-50 flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-zinc-900 tracking-tight">Reset Password</h1>
+          <p className="text-zinc-500 mt-2">Enter your new secure password</p>
+        </div>
 
+        <div className="bg-white p-8 rounded-3xl border border-zinc-200 shadow-sm">
           <AnimatePresence>
             {error && (
               <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                className="bg-red-50 border-2 border-red-500 text-red-600 text-lg p-3 sketchy-border mb-6 flex items-center gap-2 overflow-hidden font-bold"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-red-50 border border-red-100 text-red-600 text-sm p-4 rounded-xl mb-6 flex items-center gap-3"
               >
-                <ShieldAlert className="w-5 h-5 shrink-0" strokeWidth={1.5} />
-                <span>{error}</span>
+                <ShieldAlert size={18} />
+                {error}
               </motion.div>
             )}
             {success && (
               <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                className="bg-green-50 border-2 border-green-500 text-green-600 text-lg p-3 sketchy-border mb-6 flex items-center gap-2 overflow-hidden font-bold"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="bg-green-50 border border-green-100 text-green-600 text-sm p-5 rounded-2xl mb-6 flex items-center gap-3 font-bold"
               >
-                <CheckCircle className="w-5 h-5 shrink-0" strokeWidth={1.5} />
-                <span>Password reset successful! Redirecting to login...</span>
+                <CheckCircle size={20} />
+                Password reset successfully! Redirecting...
               </motion.div>
             )}
           </AnimatePresence>
 
           {!success && (
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-              <div className="relative">
-                <Input
-                  {...register('password')}
-                  type={showPassword ? "text" : "password"}
-                  placeholder="New password"
-                  icon={Lock}
-                  error={errors.password}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-3 text-zinc-500 hover:text-primary transition-colors"
-                  tabIndex="-1"
-                >
-                  {showPassword ? <EyeOff size={20} strokeWidth={1.5} /> : <Eye size={20} strokeWidth={1.5} />}
-                </button>
+              <div className="space-y-1">
+                <label className="text-sm font-semibold text-zinc-700 ml-1">New Password</label>
+                <div className="relative">
+                  <Input
+                    {...register('password')}
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Min 6 characters"
+                    icon={Lock}
+                    error={errors.password}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600"
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
               </div>
 
-              <Input
-                {...register('confirmPassword')}
-                type={showPassword ? "text" : "password"}
-                placeholder="Confirm new password"
-                icon={Lock}
-                error={errors.confirmPassword}
-              />
+              <div className="space-y-1">
+                <label className="text-sm font-semibold text-zinc-700 ml-1">Confirm New Password</label>
+                <Input
+                  {...register('confirmPassword')}
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Repeat your password"
+                  icon={Lock}
+                  error={errors.confirmPassword}
+                />
+              </div>
 
-              <Button type="submit" className="w-full text-xl h-14" isLoading={isLoading}>
+              <Button type="submit" className="w-full h-12 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-lg shadow-indigo-100 mt-2" isLoading={isLoading}>
                 Reset Password
-                {!isLoading && <ArrowRight className="ml-2 w-5 h-5" />}
+                {!isLoading && <ArrowRight className="ml-2 w-4 h-4" />}
               </Button>
             </form>
           )}
 
-          <div className="mt-8 text-center text-lg text-zinc-600">
+          <div className="mt-8 text-center text-sm text-zinc-500">
             Back to{' '}
-            <Link to="/login" className="text-primary font-bold hover:underline decoration-wavy underline-offset-4">
+            <Link to="/login" className="text-indigo-600 font-bold hover:text-indigo-700">
               Sign In
             </Link>
           </div>
-        </motion.div>
+        </div>
       </div>
     </div>
   );

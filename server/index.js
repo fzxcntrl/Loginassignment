@@ -1,8 +1,10 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import mongoose from 'mongoose';
 import rateLimit from 'express-rate-limit';
+import sequelize from './config/database.js';
+import authRoutes from './routes/auth.js';
+import taskRoutes from './routes/tasks.js';
 
 dotenv.config();
 
@@ -20,11 +22,12 @@ const limiter = rateLimit({
 app.use('/api', limiter);
 
 // Routes
-import authRoutes from './routes/auth.js';
 app.use('/api/auth', authRoutes);
+app.use('/api/tasks', taskRoutes);
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {
+  console.error(err.stack);
   const statusCode = err.statusCode || 500;
   const message = err.message || 'Internal Server Error';
   res.status(statusCode).json({
@@ -36,14 +39,17 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 5001;
 
-// MongoDB Connection
-mongoose.connect(process.env.MONGO_URI)
+// Database Connection and Sync
+sequelize.authenticate()
   .then(() => {
-    console.log('Connected to MongoDB');
+    console.log('Connected to PostgreSQL');
+    return sequelize.sync(); // Sync models to database
+  })
+  .then(() => {
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
     });
   })
   .catch((err) => {
-    console.error('Failed to connect to MongoDB:', err);
+    console.error('Database connection error:', err);
   });
